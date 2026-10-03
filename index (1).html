@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AttendX — Smart College Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6fc;--card:#fff;--ink:#0f1b3d;--muted:#5b6785;--line:#e3e9f4;--brand:#1d3fbb;--navy:#0b1f5c;--soft:#eaf0ff;
+--safe:#16a34a;--safe-bg:#e7f7ed;--risk:#b7791f;--risk-bar:#eab308;--risk-bg:#fff6dc;--short:#dc2626;--short-bg:#fde9e9;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1226;--card:#131c38;--ink:#e8edff;--muted:#9aa7c7;--line:#243050;--brand:#6c8cff;--soft:#1b2750;--safe-bg:#12301f;--risk:#f0c24b;--risk-bg:#3a3213;--short-bg:#3b1a1c}}
+:root[data-theme="dark"]{--bg:#0b1226;--card:#131c38;--ink:#e8edff;--muted:#9aa7c7;--line:#243050;--brand:#6c8cff;--soft:#1b2750;--safe-bg:#12301f;--risk:#f0c24b;--risk-bg:#3a3213;--short-bg:#3b1a1c}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:"Plus Jakarta Sans",system-ui,sans-serif;font-size:15px}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:var(--navy);color:#fff;padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;height:100vh}
+.logo{font-size:1.5rem;font-weight:800;letter-spacing:-.02em}.logo i{font-style:normal;color:#7fa2ff}
+.tag{font-size:.78rem;opacity:.7;margin-top:4px;line-height:1.4}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.1);border-radius:12px;padding:4px}
+.seg button{border:0;background:none;color:#fff;padding:8px;border-radius:9px;font-weight:600;opacity:.75}
+.seg button.on{background:#fff;color:var(--navy);opacity:1}
+nav{display:flex;flex-direction:column;gap:4px}
+nav button{text-align:left;border:0;background:none;color:#fff;opacity:.8;padding:10px 12px;border-radius:10px;font-weight:500}
+nav button:hover{background:rgba(255,255,255,.1);opacity:1}
+.who{margin-top:auto;font-size:.82rem;opacity:.8;line-height:1.5}
+main{padding:28px;max-width:1080px;width:100%}
+h2{margin:0 0 4px;font-size:1.6rem;letter-spacing:-.02em}
+h3{margin:0 0 12px;font-size:1.05rem}
+.sub{color:var(--muted);margin:0 0 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 4px 18px rgba(15,27,61,.05)}
+.grid{display:grid;gap:16px}
+.top{grid-template-columns:minmax(260px,1fr) 2fr}
+.cards{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.two{grid-template-columns:1fr 1fr}
+section{margin-top:24px;scroll-margin-top:16px}
+.hero{display:flex;align-items:center;gap:18px}
+.ring{position:relative;width:128px;height:128px;flex:none}
+.ring b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800}
+.ring small{font-size:.7rem;font-weight:500;color:var(--muted)}
+.kv{display:grid;gap:6px;color:var(--muted);font-size:.9rem}.kv b{color:var(--ink)}
+.pill{display:inline-flex;gap:6px;align-items:center;padding:4px 10px;border-radius:99px;font-size:.78rem;font-weight:700}
+.safe{background:var(--safe-bg);color:var(--safe)}.risk{background:var(--risk-bg);color:var(--risk)}.short{background:var(--short-bg);color:var(--short)}
+.sc-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sc-h b{font-size:1rem}
+.big{font-size:2rem;font-weight:800;letter-spacing:-.02em}
+.bar{position:relative;height:10px;background:var(--soft);border-radius:99px;margin:10px 0}
+.bar i{display:block;height:100%;border-radius:99px}
+.bar u{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.55;left:75%}
+.f-safe{background:var(--safe)}.f-risk{background:var(--risk-bar)}.f-short{background:var(--short)}
+.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.85rem}
+.ins{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.ins li{display:flex;gap:10px;padding:12px 14px;border-radius:12px;background:var(--bg);line-height:1.45}
+.rec{list-style:none;margin:0;padding:0}
+.rec li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.rec li:last-child{border:0}.rec small{color:var(--muted);display:block}
+form.sim{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+label{display:grid;gap:6px;font-size:.82rem;color:var(--muted);font-weight:600}
+input,select{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+#simOut{margin-top:16px;padding:16px;border-radius:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+#simOut .big{line-height:1}
+.btn{border:0;background:var(--brand);color:#fff;padding:10px 16px;border-radius:10px;font-weight:700}
+html:not([data-theme="dark"]) .btn{color:#fff}
+.btn.ghost{background:var(--soft);color:var(--brand)}
+.btn.sm{padding:8px 12px;font-size:.85rem}
+.cls{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.cls:last-child{border:0}.cls .t{font-weight:700}.cls small{color:var(--muted)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);gap:10px}
+.row small{color:var(--muted);margin-left:8px}
+.tog{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.tog button{border:0;background:none;padding:7px 14px;font-weight:600;color:var(--muted)}
+.tog button.p.on{background:var(--safe);color:#fff}.tog button.a.on{background:var(--short);color:#fff}
+.acts{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:600}
+.wrapx{overflow-x:auto}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9}
+#toast.show{opacity:1}
+.shell[hidden],#login[hidden]{display:none}
+#login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.lhero{background:var(--navy);color:#fff;padding:48px 44px;display:flex;flex-direction:column;gap:20px;justify-content:center}
+.lhero h1{margin:0;font-size:2.2rem;letter-spacing:-.03em;line-height:1.15;max-width:16ch}
+.lhero p{margin:0;opacity:.75;max-width:42ch;line-height:1.5}
+.demo{display:grid;gap:12px;margin-top:8px}.demo h3{margin:0;font-size:.95rem;opacity:.85}
+.cred{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;line-height:1.7}
+.cred b{display:block}
+.cred code{font-family:ui-monospace,Menlo,monospace;font-size:.85rem;background:rgba(255,255,255,.14);padding:2px 6px;border-radius:6px}
+.cred .btn{background:#fff;color:var(--navy)}
+.lright{display:flex;align-items:center;justify-content:center;padding:24px}
+.lform{width:min(420px,100%);display:grid;gap:14px}
+.lseg{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:12px;padding:4px}
+.lseg button{border:0;background:none;padding:9px;border-radius:9px;font-weight:700;color:var(--muted)}
+.lseg button.on{background:var(--brand);color:#fff}
+#lerr{color:var(--short);font-size:.85rem;min-height:1.2em;font-weight:600}
+.out{border:1px solid rgba(255,255,255,.3);background:none;color:#fff;padding:9px 12px;border-radius:10px;font-weight:600}
+.out:hover{background:rgba(255,255,255,.1)}
+@media (max-width:860px){
+#login{grid-template-columns:1fr}.lhero{padding:28px 20px}.lhero h1{font-size:1.7rem}
+.out{order:2;margin-left:auto}
+.shell{grid-template-columns:1fr}
+aside{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;padding:14px 16px;gap:12px}
+.tag,.who{display:none}.seg{width:100%;order:3}
+nav{flex-direction:row;overflow-x:auto;width:100%;order:4}nav button{white-space:nowrap}
+main{padding:18px 14px}.top,.two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<div id="login">
+  <div class="lhero">
+    <div class="logo">Attend<i>X</i></div>
+    <h1>Know your attendance. Plan your semester.</h1>
+    <p>Students track attendance and plan ahead. Faculty mark attendance in seconds. Sign in with a demo account to explore.</p>
+    <div class="demo"><h3>Demo credentials</h3>
+      <div class="cred"><div><b>Student</b>ID: <code>21CSE001</code><br>Password: <code>student123</code></div>
+        <button class="btn sm" type="button" data-act="fill" data-v="student" data-id="21CSE001" data-pw="student123">Use these</button></div>
+      <div class="cred"><div><b>Faculty</b>ID: <code>FAC101</code><br>Password: <code>faculty123</code></div>
+        <button class="btn sm" type="button" data-act="fill" data-v="faculty" data-id="FAC101" data-pw="faculty123">Use these</button></div>
+    </div>
+  </div>
+  <div class="lright"><form class="card lform" id="lf" autocomplete="off">
+    <h2>Sign in</h2>
+    <div class="lseg" role="group" aria-label="Profile type">
+      <button type="button" id="l-student" data-act="lrole" data-v="student">Student</button>
+      <button type="button" id="l-faculty" data-act="lrole" data-v="faculty">Faculty</button>
+    </div>
+    <label>User ID<input id="lid" required></label>
+    <label>Password<input id="lpw" type="password" required></label>
+    <div id="lerr" role="alert"></div>
+    <button class="btn" type="submit">Sign in</button>
+  </form></div>
+</div>
+<div class="shell" id="shell" hidden>
+  <aside>
+    <div><div class="logo">Attend<i>X</i></div><div class="tag">Know your attendance. Plan your semester.</div></div>
+    <nav id="nav"></nav>
+    <div class="who" id="who"></div>
+    <button class="out" data-act="logout">Log out</button>
+  </aside>
+  <main id="main"></main>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>
+/* ---------- MOCK DATA (swap for backend responses later) ---------- */
+const DB={
+  student:{id:"s1",name:"Aarav Sharma",roll:"21CSE001",sem:"5th Semester",section:"CSE-A"},
+  faculty:{name:"Dr. Meera Krishnan",dept:"Computer Science"},
+  required:75,
+  subjects:[
+    {id:"dbms",name:"DBMS",a:46,t:50},{id:"os",name:"Operating Systems",a:39,t:50},
+    {id:"cn",name:"Computer Networks",a:35,t:49},{id:"ai",name:"Artificial Intelligence",a:51,t:60},
+    {id:"math",name:"Mathematics",a:38,t:50}],
+  roster:[["s1","Aarav Sharma","21CSE001"],["s2","Diya Patel","21CSE002"],["s3","Rohan Mehta","21CSE003"],["s4","Ananya Iyer","21CSE004"],["s5","Kabir Singh","21CSE005"],["s6","Meera Nair","21CSE006"],["s7","Arjun Reddy","21CSE007"],["s8","Sneha Gupta","21CSE008"],["s9","Vikram Rao","21CSE009"],["s10","Isha Kapoor","21CSE010"]],
+  trend:[84,83,82,80,79,81,80],
+  recent:[["Today","Mathematics","9:00 AM",true],["Yesterday","Artificial Intelligence","2:00 PM",true],["Yesterday","Computer Networks","12:00 PM",false],["Yesterday","DBMS","10:00 AM",true],["2 days ago","Operating Systems","12:00 PM",false],["2 days ago","Computer Networks","10:00 AM",false]].map(r=>({when:r[0],subject:r[1],time:r[2],present:r[3]})),
+  timetable:{Mon:[["10:00 AM","dbms"],["12:00 PM","os"],["2:00 PM","cn"]],Tue:[["10:00 AM","ai"],["12:00 PM","math"],["2:00 PM","dbms"]],
+    Wed:[["10:00 AM","cn"],["12:00 PM","dbms"],["2:00 PM","ai"]],Thu:[["10:00 AM","os"],["12:00 PM","math"],["2:00 PM","cn"]],Fri:[["10:00 AM","math"],["12:00 PM","ai"],["2:00 PM","os"]]},
+  users:[{role:"student",id:"21CSE001",password:"student123"},{role:"faculty",id:"FAC101",password:"faculty123"}],
+  saved:{}
+};
+/* ---------- DATA SERVICE: replace bodies with fetch() calls to a real backend ---------- */
+const API={
+  async login({role,id,password}){                              // POST /auth/login (demo only: checked in the browser, not secure)
+    const u=DB.users.find(x=>x.role===role&&x.id.toLowerCase()===id.trim().toLowerCase()&&x.password===password);
+    return u?{ok:true,role:u.role}:{ok:false};
+  },
+  async getStudent(){return DB.student},
+  async getSubjects(){return DB.subjects},
+  async getRecent(){return DB.recent},
+  async getTrend(){return DB.trend},
+  async getRoster(section){return DB.roster},                 // GET /sections/:id/students
+  async getTimetable(){return DB.timetable},                   // GET /timetable?faculty=...
+  async saveAttendance({classId,subjectId,time,marks}){        // POST /attendance
+    const sub=DB.subjects.find(s=>s.id===subjectId),prev=DB.saved[classId];
+    // mock backend only tracks the demo student's counts
+    const now=marks[DB.student.id]===true,was=prev?prev[DB.student.id]===true:null;
+    if(prev===undefined){sub.t++;if(now)sub.a++;DB.recent.unshift({when:"Today",subject:sub.name,time,present:now})}
+    else{if(now&&!was)sub.a++;if(!now&&was)sub.a--;
+      const r=DB.recent.find(x=>x.classId===classId);if(r)r.present=now}
+    if(prev===undefined)DB.recent[0].classId=classId;
+    DB.saved[classId]={...marks};
+    DB.trend[DB.trend.length-1]=overall().p;
+    return{ok:true};
+  }
+};
+/* ---------- helpers ---------- */
+const $=id=>document.getElementById(id);
+const pct=(a,t)=>t?a/t*100:0;
+const fmt=n=>(Math.round(n*10)/10).toFixed(1).replace(".0","");
+const status=p=>p>=80?{k:"safe",l:"Safe",e:"🟢"}:p>=75?{k:"risk",l:"At Risk",e:"🟡"}:{k:"short",l:"Shortage",e:"🔴"};
+const sub=id=>DB.subjects.find(s=>s.id===id);
+function overall(){const a=DB.subjects.reduce((x,s)=>x+s.a,0),t=DB.subjects.reduce((x,s)=>x+s.t,0);return{a,t,p:pct(a,t)}}
+function insight(s){
+  const p=pct(s.a,s.t),R=DB.required/100;
+  if(p>=DB.required){
+    const m=Math.floor(s.a/R-s.t+1e-9);
+    return m>0?`You can miss ${m} more ${s.name} class${m>1?"es":""} and remain above ${DB.required}%.`
+      :`You're right at the limit in ${s.name}. Missing the next class will drop you below ${DB.required}%.`;
+  }
+  const need=Math.ceil((R*s.t-s.a)/(1-R)-1e-9);
+  return `You need to attend the next ${need} ${s.name} class${need>1?"es":""} in a row to reach ${DB.required}%.`;
+}
+function today(){
+  const d=new Date().toLocaleDateString("en-US",{weekday:"short"});
+  const ok=DB.timetable[d];return{day:ok?d:"Mon",weekend:!ok};
+}
+const S={role:"student",lrole:"student",open:null,draft:{}};
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("show");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("show"),2400)}
+
+/* ---------- views ---------- */
+async function studentView(){
+  const [st,subs,recent,trend]=await Promise.all([API.getStudent(),API.getSubjects(),API.getRecent(),API.getTrend()]);
+  const o=overall(),os=status(o.p),C=2*Math.PI*54;
+  const cards=subs.map(s=>{const p=pct(s.a,s.t),x=status(p);return`
+    <div class="card"><div class="sc-h"><b>${s.name}</b><span class="pill ${x.k}">${x.e} ${x.l}</span></div>
+    <div class="big">${fmt(p)}%</div>
+    <div class="bar" role="img" aria-label="${fmt(p)} percent, required ${DB.required}"><i class="f-${x.k}" style="width:${p}%"></i><u></u></div>
+    <div class="meta"><span>Attended ${s.a}</span><span>Total ${s.t}</span></div></div>`}).join("");
+  const order={short:0,risk:1,safe:2};
+  const ins=[...subs].sort((a,b)=>order[status(pct(a.a,a.t)).k]-order[status(pct(b.a,b.t)).k]).map(s=>`<li><span>${status(pct(s.a,s.t)).e}</span><span>${insight(s)}</span></li>`).join("");
+  const lo=70,hi=90,pts=trend.map((v,i)=>[30+i*(270/(trend.length-1)),110-(Math.min(hi,Math.max(lo,v))-lo)/(hi-lo)*90]);
+  const y75=110-(75-lo)/(hi-lo)*90;
+  const chart=`<svg viewBox="0 0 320 140" width="100%" role="img" aria-label="Attendance trend over recent weeks">
+    <line x1="30" x2="300" y1="${y75}" y2="${y75}" stroke="var(--short)" stroke-dasharray="4 4" opacity=".6"/>
+    <text x="4" y="${y75+4}" font-size="10" fill="var(--muted)">75</text>
+    <polyline fill="none" stroke="var(--brand)" stroke-width="3" stroke-linejoin="round" points="${pts.map(p=>p.join(",")).join(" ")}"/>
+    ${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--brand)"/><text x="${p[0]}" y="132" font-size="10" text-anchor="middle" fill="var(--muted)">W${i+1}</text>`).join("")}
+    <text x="${pts.at(-1)[0]}" y="${pts.at(-1)[1]-9}" font-size="11" font-weight="700" text-anchor="end" fill="var(--ink)">${fmt(trend.at(-1))}%</text></svg>`;
+  const rec=recent.slice(0,6).map(r=>`<li><div>${r.subject}<small>${r.when} · ${r.time}</small></div><span class="pill ${r.present?"safe":"short"}">${r.present?"Present":"Absent"}</span></li>`).join("");
+  return`<h2>Hi, ${st.name.split(" ")[0]} 👋</h2><p class="sub">${st.sem} · Section ${st.section} · Roll ${st.roll}</p>
+  <div class="grid top"><div class="card hero"><div class="ring"><svg viewBox="0 0 128 128" width="128" height="128">
+    <circle cx="64" cy="64" r="54" fill="none" stroke="var(--soft)" stroke-width="12"/>
+    <circle cx="64" cy="64" r="54" fill="none" stroke="var(--${os.k==="risk"?"risk-bar":os.k==="safe"?"safe":"short"})" stroke-width="12" stroke-linecap="round" stroke-dasharray="${C*o.p/100} ${C}" transform="rotate(-90 64 64)"/></svg>
+    <b>${fmt(o.p)}%<small>Overall</small></b></div>
+    <div class="kv"><span class="pill ${os.k}">${os.e} ${os.l}</span><span>Required: <b>${DB.required}%</b></span><span>Classes: <b>${o.a} / ${o.t}</b></span></div></div>
+    <div class="card"><h3>Attendance trend</h3>${chart}</div></div>
+  <section><h3>Subject-wise attendance</h3><div class="grid cards">${cards}</div></section>
+  <section class="grid two"><div class="card"><h3>Attendance insights</h3><ul class="ins">${ins}</ul></div>
+    <div class="card"><h3>Recent attendance</h3><ul class="rec">${rec}</ul></div></section>
+  <section id="sim"><div class="card"><h3>What if? Attendance simulator</h3>
+    <form class="sim" onsubmit="return false">
+      <label>Subject<select id="sSub"><option value="all">Overall</option>${subs.map(s=>`<option value="${s.id}">${s.name}</option>`).join("")}</select></label>
+      <label>Upcoming classes<input id="sUp" type="number" min="0" max="200" value="10"></label>
+      <label>Classes you'll attend<input id="sAt" type="number" min="0" max="200" value="8"></label>
+    </form><div id="simOut"></div></div></section>`;
+}
+function simCalc(){
+  const id=$("sSub").value,up=Math.max(0,+$("sUp").value||0),at=Math.min(up,Math.max(0,+$("sAt").value||0));
+  const b=id==="all"?overall():sub(id),p=pct(b.a+at,b.t+up),x=p>=DB.required;
+  const o=$("simOut");o.className=x?"safe":"short";
+  o.innerHTML=`<div><div class="big">${fmt(p)}%</div><small>Projected attendance (${b.a+at} / ${b.t+up})</small></div>
+  <span class="pill ${x?"safe":"short"}">${x?"🟢 Above":"🔴 Below"} ${DB.required}%</span>`;
+}
+async function facultyView(){
+  const [roster,tt]=await Promise.all([API.getRoster(DB.student.section),API.getTimetable()]);
+  const {day,weekend}=today(),list=tt[day];
+  const classes=list.map(([time,sid])=>{const id=day+time+sid,done=!!DB.saved[id];return`
+    <div class="cls"><div><div class="t">${time} — ${sub(sid).name} — ${DB.student.section}</div><small>${done?"Attendance saved":"Not marked yet"}</small></div>
+    <button class="btn sm ${done?"ghost":""}" data-act="mark" data-id="${id}">${done?"Edit Attendance":"Mark Attendance"}</button></div>`}).join("");
+  let panel="";
+  if(S.open){
+    const [d,time,sid]=[S.open.day,S.open.time,S.open.sid],mk=S.draft;
+    panel=`<section id="panel"><div class="card"><h3>${sub(sid).name} · ${time} · ${DB.student.section}</h3>
+      ${roster.map(([id,n,r])=>`<div class="row"><span>${n}<small>${r}</small></span><div class="tog" role="group" aria-label="${n}">
+        <button class="p ${mk[id]===true?"on":""}" data-act="set" data-s="${id}" data-v="1">Present</button>
+        <button class="a ${mk[id]!==true?"on":""}" data-act="set" data-s="${id}" data-v="0">Absent</button></div></div>`).join("")}
+      <div class="acts"><button class="btn ghost" data-act="allp">Mark All Present</button><button class="btn" data-act="save">Save Attendance</button><button class="btn ghost" data-act="close">Cancel</button></div></div></section>`;
+  }
+  const slots=["10:00 AM","12:00 PM","2:00 PM"];
+  const table=`<div class="wrapx"><table><tr><th>Time</th>${Object.keys(tt).map(d=>`<th>${d}</th>`).join("")}</tr>
+    ${slots.map((s,i)=>`<tr><td>${s}</td>${Object.keys(tt).map(d=>`<td>${sub(tt[d][i][1]).name}</td>`).join("")}</tr>`).join("")}</table></div>`;
+  return`<h2>Today's classes</h2><p class="sub">${DB.faculty.name} · ${DB.faculty.dept}${weekend?" · Weekend: showing the Monday timetable":""}</p>
+  <div class="card" id="today">${classes}</div>${panel}
+  <section id="tt"><div class="card"><h3>Weekly timetable · ${DB.student.section}</h3>${table}</div></section>`;
+}
+async function render(){
+  const stu=S.role==="student";
+  $("nav").innerHTML=stu?`<button data-act="go" data-t="main">Dashboard</button><button data-act="go" data-t="sim">What-if simulator</button>`
+    :`<button data-act="go" data-t="today">Today's classes</button><button data-act="go" data-t="tt">Weekly timetable</button>`;
+  $("who").innerHTML=stu?`${DB.student.name}<br>${DB.student.sem} · ${DB.student.section}`:`${DB.faculty.name}<br>${DB.faculty.dept}`;
+  $("main").innerHTML=stu?await studentView():await facultyView();
+  if(stu)simCalc();
+}
+/* ---------- events ---------- */
+document.addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;const a=b.dataset.act;
+  if(a==="lrole")setLRole(b.dataset.v);
+  else if(a==="fill"){setLRole(b.dataset.v);$("lid").value=b.dataset.id;$("lpw").value=b.dataset.pw}
+  else if(a==="logout"){S.open=null;$("shell").hidden=true;$("login").hidden=false;$("lpw").value="";scrollTo(0,0)}
+  else if(a==="go"){const t=b.dataset.t==="main"?$("main"):$(b.dataset.t);t&&t.scrollIntoView({behavior:"smooth"})}
+  else if(a==="mark"){
+    const {day}=today(),slot=DB.timetable[day].find(([t,s])=>day+t+s===b.dataset.id);
+    S.open={id:b.dataset.id,day,time:slot[0],sid:slot[1]};
+    S.draft={...(DB.saved[b.dataset.id]||{})};await render();$("panel").scrollIntoView({behavior:"smooth"})}
+  else if(a==="set"){S.draft[b.dataset.s]=b.dataset.v==="1";await render()}
+  else if(a==="allp"){DB.roster.forEach(r=>S.draft[r[0]]=true);await render()}
+  else if(a==="close"){S.open=null;await render()}
+  else if(a==="save"){
+    const o=S.open;
+    await API.saveAttendance({classId:o.id,subjectId:o.sid,time:o.time,marks:S.draft});
+    S.open=null;await render();toast("Attendance saved. The student dashboard is updated.");}
+});
+document.addEventListener("input",e=>{if(e.target.closest(".sim"))simCalc()});
+function setLRole(r){S.lrole=r;["student","faculty"].forEach(x=>{const b=$("l-"+x);b.classList.toggle("on",x===r);b.setAttribute("aria-pressed",x===r)});$("lerr").textContent=""}
+$("lf").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const res=await API.login({role:S.lrole,id:$("lid").value,password:$("lpw").value});
+  if(!res.ok){$("lerr").textContent="Incorrect ID or password for the "+S.lrole+" profile. Check the demo credentials.";return}
+  S.role=res.role;S.open=null;$("login").hidden=true;$("shell").hidden=false;await render();scrollTo(0,0);
+});
+setLRole("student");
+</script>
+</body>
+</html>
